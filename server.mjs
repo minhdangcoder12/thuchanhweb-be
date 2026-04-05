@@ -5,7 +5,19 @@
 import express from "express";
 import models from "./models.js";
 
-const PORT = Number(process.env.PORT) || 3001;
+function listenPort() {
+  const raw = process.env.PORT;
+  if (raw !== undefined && raw !== "") {
+    const n = Number(raw);
+    if (!Number.isNaN(n) && n > 0) {
+      return n;
+    }
+  }
+  return 3001;
+}
+
+const PORT = listenPort();
+const HOST = process.env.HOST || "0.0.0.0";
 const app = express();
 
 app.use((req, res, next) => {
@@ -40,6 +52,15 @@ app.get("/photosOfUser/:id", (req, res) => {
   res.json(models.photoOfUserModel(req.params.id));
 });
 
-app.listen(PORT, () => {
-  console.log(`API: http://localhost:${PORT}`);
+const server = app.listen(PORT, HOST, () => {
+  console.log(`API listening on http://${HOST}:${PORT}`);
+});
+
+server.on("error", (err) => {
+  if (err.code === "EADDRINUSE") {
+    console.error(
+      `[EADDRINUSE] Port ${PORT} đang bị dùng. Trên CodeSandbox: tắt terminal/task trùng, hoặc Restart sandbox (không chạy "npm start" 2 lần). Local: PORT=3002 npm start`,
+    );
+  }
+  throw err;
 });
