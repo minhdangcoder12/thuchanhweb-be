@@ -59,8 +59,9 @@ const server = app.listen(PORT, HOST, () => {
 server.on("error", (err) => {
   if (err.code === "EADDRINUSE") {
     console.error(
-      `[EADDRINUSE] Port ${PORT} đang bị dùng. Trên CodeSandbox: tắt terminal/task trùng, hoặc Restart sandbox (không chạy "npm start" 2 lần). Local: PORT=3002 npm start`,
+      `[EADDRINUSE] Port ${PORT} đang bị dùng — thường do chạy server 2 lần. CodeSandbox: Restart sandbox, chỉ để một terminal/task. Local: PORT=3002 npm start`,
     );
+    process.exit(1);
   }
   throw err;
 });

@@ -4,16 +4,5 @@
       "name": "Install dependencies",
       "command": "npm install"
     }
-  ],
-  "tasks": {
-    "start": {
-      "name": "API server",
-      "command": "node server.mjs",
-      "runAtStart": true,
-      "restartOn": {
-        "files": ["server.mjs", "models.js"],
-        "branch": false
-      }
-    }
-  }
+  ]
 }
